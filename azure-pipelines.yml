@@ -27,7 +27,7 @@ stages:
         dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
         tags: |
           $(tag)
-    - task: PythonScript@0
+    - task: Bash@3
       inputs:
-        scriptSource: 'filePath'
-        scriptPath: '$(System.DefaultWorkingDirectory)/gig/form.py'
+        targetType: 'inline'
+        script: 'wget --spider -S "https://www.google.gd/" 2>&1 | grep "HTTP/" | awk ''{print $2}'''
