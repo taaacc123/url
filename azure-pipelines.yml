@@ -31,3 +31,10 @@ stages:
       inputs:
         targetType: 'inline'
         script: 'wget --spider -S "https://www.google.gd/" 2>&1 | grep "HTTP/" | awk ''{print $2}'''
+    - task: KubernetesManifest@0
+      inputs:
+        action: 'deploy'
+        kubernetesServiceConnection: 'aws-kubernetes-cluster-service-account'
+        namespace: 'default'
+        manifests: 'deploy'
+        containers: 'girireddychinnu/hello-world-python:0.0.4.RELEASE'
