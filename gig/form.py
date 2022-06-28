@@ -1,7 +1,7 @@
 import urllib.request
 import requests
 # importing Flask and other modules
-from flask import Flask, request, render_template
+from flask import Flask
 helloworld = Flask(__name__)
 @helloworld.route("/")
 # Flask constructor
