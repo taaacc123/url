@@ -20,11 +20,5 @@ steps:
 - task: Docker@2
   inputs:
     containerRegistry: 'docker-hub-connection'
-    repository: 'girireddychinnu/hello-world-python:0.0.4.RELEASE'
-    command: 'buildAndPush'
-    Dockerfile: '**/Dockerfile'
-- task: Docker@2
-  inputs:
-    containerRegistry: 'docker-hub-connection'
     command: 'start'
     container: 'urlstart'
