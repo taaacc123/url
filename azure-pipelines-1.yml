@@ -23,22 +23,22 @@ variables:
   tag: '$(Build.BuildId)'
 
 stages:
-- stage: Build
-  displayName: Build image
-  jobs:
-  - job: Build
-    displayName: Build
-    pool:
-      vmImage: ubuntu-latest
-    steps:
-    - task: Docker@2
-      displayName: Build an image
-      inputs:
-        containerRegistry: 'docker-hub-connection'
-        repository: 'girireddychinnu/hello-world-python'
-        command: 'build'
-        Dockerfile: '**/Dockerfile'
-        tags: '$(tag)'
+# - stage: Build
+#   displayName: Build image
+#   jobs:
+#   - job: Build
+#     displayName: Build
+#     pool:
+#       vmImage: ubuntu-latest
+#     steps:
+#     - task: Docker@2
+#       displayName: Build an image
+#       inputs:
+#         containerRegistry: 'docker-hub-connection'
+#         repository: 'girireddychinnu/hello-world-python'
+#         command: 'build'
+#         Dockerfile: '**/Dockerfile'
+#         tags: '$(tag)'
 
 - stage: Deploy
 
@@ -59,4 +59,4 @@ stages:
       inputs:
         azureSubscription: 'Azure subscription 1(a7a7043b-4d0f-483f-bfad-de4a87af2f1d)'
         appName: 'urlcheck123'
-        containers: 'girireddychinnu/hello-world-python:$(tag)'
+        containers: 'girireddychinnu/hello-world-python:0.0.4.RELEASE'
