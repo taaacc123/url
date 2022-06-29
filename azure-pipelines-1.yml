@@ -59,4 +59,3 @@ stages:
         azureSubscription: 'Azure subscription 1(a7a7043b-4d0f-483f-bfad-de4a87af2f1d)'
         appName: 'urlcheck123'
         containers: 'girireddychinnu/hello-world-python:$(tag)'
-        containerCommand: 'run'
