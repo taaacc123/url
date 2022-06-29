@@ -58,5 +58,5 @@ stages:
     - task: AzureWebAppContainer@1
       inputs:
         azureSubscription: 'Azure subscription 1(a7a7043b-4d0f-483f-bfad-de4a87af2f1d)'
-        appName: 'urlnew'
+        appName: 'urlnnew1'
         containers: 'girireddychinnu/hello-world-python:0.0.4.RELEASE'
