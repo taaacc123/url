@@ -1,18 +1,70 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
+#BUILD
+#Build Docker Image
+#Push to docker =>tag
+
+#DEPLOY
+#image:tag => Deploy to K8S
+#apply => kubectl apply -f deployement.yaml
+
+#We are just replicating everything we did earlier except creating service connection
+#To be able to make deployment.yaml available we need to make that as an artifact
+#So we need to publish artifacts in BUILD stage and make use in DEPLOY stage
+#So we need to copy files to the staging directory and then publish 
+#In DEPLOY Stage we download them and deploy them to kubernetes
+
 
 trigger:
 - main
 
-pool:
-  vmImage: ubuntu-latest
+resources:
+- repo: self
 
-steps:
+variables:
+  tag: '$(Build.BuildId)'
 
-- task: ContainerBuild@0
-  inputs:
-    dockerRegistryServiceConnection: 'docker-hub-connection'
-    repository: 'girireddychinnu/hello-world-python:0.0.4.RELEASE'
-    Dockerfile: 'Dockerfile'
+stages:
+- stage: Build
+  displayName: Build image
+  jobs:
+  - job: Build
+    displayName: Build
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: Docker@2
+      displayName: Build an image
+      inputs:
+        command: build
+        dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
+        tags: |
+          $(tag)
+    - task: CopyFiles@2
+      inputs:
+        SourceFolder: '$(System.DefaultWorkingDirectory)'
+        Contents: '**/*.yaml'
+        TargetFolder: '$(Build.ArtifactStagingDirectory)'
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        ArtifactName: 'manifest'
+        publishLocation: 'Container'
+
+- stage: Deploy
+  displayName: Deploy image
+  jobs:
+  - job: Deploy
+    displayName: Deploy
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: DownloadPipelineArtifact@2
+      inputs:
+        buildType: 'current'
+        artifactName: 'manifest'
+        itemPattern: '**/*.yaml'
+        targetPath: '$(System.ArtifactsDirectory)'
+    - task: Docker@2
+      inputs:
+        containerRegistry: 'docker-hub-connection'
+        command: 'start'
+        container: 'girireddychinnu/hello-world-python:$(tag)'
