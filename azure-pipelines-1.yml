@@ -34,10 +34,11 @@ stages:
     - task: Docker@2
       displayName: Build an image
       inputs:
-        command: build
-        dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
-        tags: |
-          $(tag)
+        containerRegistry: 'docker-hub-connection'
+        repository: 'girireddychinnu/hello-world-python'
+        command: 'build'
+        Dockerfile: '**/Dockerfile'
+        tags: '$(tag)'
 
 - stage: Deploy
 
