@@ -21,4 +21,4 @@ steps:
   inputs:
     dockerRegistryServiceConnection: 'docker-hub-connection'
     repository: 'girireddychinnu/hello-world-python:0.0.4.RELEASE'
-    Dockerfile: '**/*.yaml'
+    Dockerfile: 'Dockerfile'
