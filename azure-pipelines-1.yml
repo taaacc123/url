@@ -40,15 +40,23 @@ stages:
           $(tag)
 
 - stage: Deploy
+
   displayName: Deploy image
   jobs:
   - job: Deploy
     displayName: Deploy
-    pool:
-      vmImage: ubuntu-latest
+  #   pool:
+  #     vmImage: ubuntu-latest
+  #   steps:
+  #   - task: Docker@2
+  #     inputs:
+  #       containerRegistry: 'docker-hub-connection'
+  #       command: 'start'
+  #       container: 'girireddychinnu/hello-world-python:$(tag)'
     steps:
-    - task: Docker@2
+    - task: AzureWebAppContainer@1
       inputs:
-        containerRegistry: 'docker-hub-connection'
-        command: 'start'
-        container: 'girireddychinnu/hello-world-python:$(tag)'
+        azureSubscription: 'Azure subscription 1(a7a7043b-4d0f-483f-bfad-de4a87af2f1d)'
+        appName: 'urlcheck123'
+        containers: 'girireddychinnu/hello-world-python:$(tag)'
+        containerCommand: 'run'
