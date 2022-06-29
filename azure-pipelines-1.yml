@@ -17,8 +17,8 @@ steps:
     echo Add other tasks to build, test, and deploy your project.
     echo See https://aka.ms/yaml
   displayName: 'Run a multi-line script'
-- task: Docker@2
+- task: ContainerBuild@0
   inputs:
-    containerRegistry: 'docker-hub-connection'
-    command: 'start'
-    container: 'urlstart'
+    dockerRegistryServiceConnection: 'docker-hub-connection'
+    repository: 'girireddychinnu/hello-world-python:0.0.4.RELEASE'
+    Dockerfile: '**/*.yaml'
