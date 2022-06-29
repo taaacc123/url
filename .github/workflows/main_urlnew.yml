@@ -23,14 +23,14 @@ jobs:
       uses: docker/login-action@v1
       with:
         registry: https://index.docker.io/v1/
-        username: ${{ secrets.AzureAppService_ContainerUsername_8257099c85374a16aaa7a239ea0f512b }}
-        password: ${{ secrets.AzureAppService_ContainerPassword_09e76dd791424813ab9be97730a54c87 }}
+        username: ${{ secrets.AzureAppService_ContainerUsername_6f336295de0e49f8a97191cec4280086 }}
+        password: ${{ secrets.AzureAppService_ContainerPassword_e6291b45a80341ea868c638a207f1bcd }}
 
     - name: Build and push container image to registry
       uses: docker/build-push-action@v2
       with:
         push: true
-        tags: index.docker.io/${{ secrets.AzureAppService_ContainerUsername_8257099c85374a16aaa7a239ea0f512b }}/girireddychinnu/hello-world-python:${{ github.sha }}
+        tags: index.docker.io/${{ secrets.AzureAppService_ContainerUsername_6f336295de0e49f8a97191cec4280086 }}/girireddychinnu/hello-world-python:${{ github.sha }}
         file: ./Dockerfile
 
   deploy:
@@ -47,5 +47,5 @@ jobs:
       with:
         app-name: 'urlnew'
         slot-name: 'production'
-        publish-profile: ${{ secrets.AzureAppService_PublishProfile_5824fc57c7b84b41a054daf7d14e6d5a }}
-        images: 'index.docker.io/${{ secrets.AzureAppService_ContainerUsername_8257099c85374a16aaa7a239ea0f512b }}/girireddychinnu/hello-world-python:${{ github.sha }}'
+        publish-profile: ${{ secrets.AzureAppService_PublishProfile_84e1796af63a40d299d091080f2ade98 }}
+        images: 'index.docker.io/${{ secrets.AzureAppService_ContainerUsername_6f336295de0e49f8a97191cec4280086 }}/girireddychinnu/hello-world-python:${{ github.sha }}'
