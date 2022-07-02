@@ -1,0 +1,71 @@
+#BUILD
+#Build Docker Image
+#Push to docker =>tag
+
+#DEPLOY
+#image:tag => Deploy to K8S
+#apply => kubectl apply -f deployement.yaml
+
+#We are just replicating everything we did earlier except creating service connection
+#To be able to make deployment.yaml available we need to make that as an artifact
+#So we need to publish artifacts in BUILD stage and make use in DEPLOY stage
+#So we need to copy files to the staging directory and then publish 
+#In DEPLOY Stage we download them and deploy them to kubernetes
+
+
+trigger:
+- main
+
+resources:
+- repo: self
+
+variables:
+  tag: '$(Build.BuildId)'
+
+stages:
+- stage: Build
+  displayName: Build image
+  jobs:
+  - job: Build
+    displayName: Build
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: Docker@2
+      displayName: Build an image
+      inputs:
+        containerRegistry: 'docker-hub-connection'
+        repository: 'girireddychinnu/hello-world-python'
+        command: 'buildAndPush'
+        Dockerfile: '**/Dockerfile'
+        tags: '$(tag)'
+
+- stage: Deploy
+
+  displayName: Deploy image
+  jobs:
+  - job: Deploy
+    displayName: Deploy
+  #   pool:
+  #     vmImage: ubuntu-latest
+  #   steps:
+  #   - task: Docker@2
+  #     inputs:
+  #       containerRegistry: 'docker-hub-connection'
+  #       command: 'start'
+  #       container: 'girireddychinnu/hello-world-python:$(tag)'
+
+    steps:
+    # - task: AzureRmWebAppDeployment@4
+    #   inputs:
+    #     ConnectionType: 'AzureRM'
+    #     azureSubscription: 'Azure subscription 1(a7a7043b-4d0f-483f-bfad-de4a87af2f1d)'
+    #     appType: 'webAppLinux'
+    #     WebAppName: 'urlcheck'
+    #     # packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
+    #     RuntimeStack: 'PYTHON|3.10'
+    - task: AzureWebAppContainer@1
+      inputs:
+        azureSubscription: 'Azure subscription 1(a7a7043b-4d0f-483f-bfad-de4a87af2f1d)'
+        appName: 'urlcheck1'
+        containers: 'girireddychinnu/hello-world-python:$(tag)'
